@@ -8,6 +8,23 @@ from typing import Dict, List, Optional, Tuple
 import requests
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
+import threading
+from flask import Flask
+
+web_app = Flask(__name__)
+
+@web_app.route("/")
+def home():
+    return "Bot is running", 200
+
+def run_web():
+    import os
+    port = int(os.environ.get("PORT", 10000))
+    web_app.run(host="0.0.0.0", port=port)
+
+# Start web server in background
+threading.Thread(target=run_web, daemon=True).start()
+
 
 BOT_TOKEN = "8515346347:AAFts8VLh4GiIbkonWrHdqp-uPwfaG5dkPU"
 if not BOT_TOKEN:
@@ -338,3 +355,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
